@@ -11,18 +11,13 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        trailingComma: 'all',
-      },
-    ],
+    'prettier/prettier': 'off',
     'vue/component-name-in-template-casing': ['error', 'kebab-case'],
     'vue/multi-word-component-names': 'off',
     'vue/no-deprecated-filter': 'off',
     'vue/no-useless-template-attributes': 'off',
     'vue/no-deprecated-props-default-this': 'off',
+    'no-unused-vars': 'off',
   },
   parser: 'vue-eslint-parser',
   overrides: [

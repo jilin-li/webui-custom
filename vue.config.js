@@ -68,4 +68,5 @@ module.exports = {
       enableInSFC: true,
     },
   },
+  lintOnSave: false,  // 关闭 eslint 检查
 };

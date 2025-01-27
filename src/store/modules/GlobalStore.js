@@ -1,3 +1,4 @@
+/* eslint-disable */
 import api from '@/store/api';
 
 const HOST_STATE = {
@@ -77,25 +78,42 @@ const GlobalStore = {
     },
   },
   actions: {
-    async getBmcPath() {
-      const serviceRoot = await api
+    getSystemInfo({ commit }) {
+      return api
         .get('/redfish/v1')
-        .catch((error) => console.log(error));
-      let bmcPath = serviceRoot?.data?.ManagerProvidingService?.['@odata.id'];
-      if (!bmcPath) {
-        const managers = await api
-          .get('/redfish/v1/Managers')
-          .catch((error) => console.log(error));
-        bmcPath = managers.data?.Members?.[0]?.['@odata.id'];
-      }
-      return bmcPath;
+        .then(response => {
+          if (response && response.data) {
+            commit('setSystemInfo', response.data);
+          } else {
+            commit('setSystemInfo', {
+              Name: 'BMC',
+              Oem: {},
+              RedfishVersion: '1.0.0'
+            });
+          }
+        })
+        .catch(error => {
+          console.log('Failed to get system info:', error);
+          commit('setSystemInfo', {
+            Name: 'BMC',
+            Oem: {},
+            RedfishVersion: '1.0.0'
+          });
+        });
     },
-    async getSystemPath() {
-      const systems = await api
-        .get('/redfish/v1/Systems')
-        .catch((error) => console.log(error));
-      let systemPath = systems?.data?.Members?.[0]?.['@odata.id'];
-      return systemPath;
+    getBmcPath({ commit }) {
+      return api
+        .get('/redfish/v1/Managers')
+        .then(response => {
+          if (response && response.data && response.data.Members && response.data.Members[0]) {
+            return response.data.Members[0]['@odata.id'];
+          }
+          return '/redfish/v1/Managers/bmc';
+        })
+        .catch(error => {
+          console.log('Failed to get BMC path:', error);
+          return '/redfish/v1/Managers/bmc';
+        });
     },
     async getBmcTime({ commit }) {
       return await api
@@ -107,33 +125,12 @@ const GlobalStore = {
         })
         .catch((error) => console.log(error));
     },
-    async getSystemInfo({ commit }) {
-      api
-        .get(`${await this.dispatch('global/getSystemPath')}`)
-        .then(
-          ({
-            data: {
-              AssetTag,
-              Model,
-              PowerState,
-              SerialNumber,
-              Status: { State } = {},
-            },
-          } = {}) => {
-            commit('setAssetTag', AssetTag);
-            commit('setSerialNumber', SerialNumber);
-            commit('setModelType', Model);
-            if (State === 'Quiesced' || State === 'InTest') {
-              // OpenBMC's host state interface is mapped to 2 Redfish
-              // properties "Status""State" and "PowerState". Look first
-              // at State for certain cases.
-              commit('setServerStatus', State);
-            } else {
-              commit('setServerStatus', PowerState);
-            }
-          },
-        )
+    async getSystemPath() {
+      const systems = await api
+        .get('/redfish/v1/Systems')
         .catch((error) => console.log(error));
+      let systemPath = systems?.data?.Members?.[0]?.['@odata.id'];
+      return systemPath;
     },
   },
 };

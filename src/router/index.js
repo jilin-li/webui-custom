@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable */
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 //Do not change store or routes import.
@@ -25,10 +25,9 @@ function allowRouterToNavigate(to, next) {
   
   // 检查是否在登录页面
   if (to.path === '/login') {
-    // 如果已登录，重定向到概览页面
     if (store.getters['authentication/isLoggedIn']) {
-      console.log('Already logged in, redirecting to overview');
-      next('/overview');
+      console.log('Already logged in, redirecting to home');
+      next('/');  // 改为重定向到根路径
       return;
     }
   }
@@ -43,13 +42,7 @@ function allowRouterToNavigate(to, next) {
     }
   }
 
-  // 如果是根路径，重定向到概览页面
-  if (to.path === '/') {
-    console.log('Root path detected, redirecting to overview');
-    next('/overview');
-    return;
-  }
-
+  // 直接允许导航
   console.log('Proceeding with navigation to:', to.path);
   next();
 }

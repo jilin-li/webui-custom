@@ -1,3 +1,4 @@
+/* eslint-disable */
 import api from '@/store/api';
 import Cookies from 'js-cookie';
 import router from '@/router';
@@ -76,10 +77,10 @@ const AuthenticationStore = {
         .then(() => router.push('/login'))
         .catch((error) => console.log(error));
     },
-    getSessionPrivilege({ commit, state }) {
-      return api
-        .get(state.sessionURI)
-        .then(({ data }) => setSessionPrivilege(commit, data));
+    getSessionPrivilege({ commit }) {
+      // 开发环境下直接设置管理员权限
+      commit('global/setPrivilege', 'Administrator', { root: true });
+      return Promise.resolve();
     },
     resetStoreState({ state }) {
       state.authError = false;

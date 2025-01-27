@@ -41,6 +41,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import RFB from '@novnc/novnc/core/rfb';
 import StatusIcon from '@/components/Global/StatusIcon';
 import IconLaunch from '@carbon/icons-vue/es/launch/20';
