@@ -1,4 +1,4 @@
-import api, { isPasswordExpired } from '@/store/api';
+import api from '@/store/api';
 import Cookies from 'js-cookie';
 import router from '@/router';
 import { roles } from '@/router/routes';
@@ -16,17 +16,11 @@ const AuthenticationStore = {
   getters: {
     consoleWindow: (state) => state.consoleWindow,
     authError: (state) => state.authError,
-    isLoggedIn: (state) => {
-      // We might have gotten XSRF-TOKEN (and HttpOnly SESSION cookie) by Mutual TLS authentication,
-      // without going through explicit Session creation
-      return (
-        state.xsrfCookie !== undefined ||
-        state.isAuthenticatedCookie == 'true' ||
-        state.xAuthToken !== null
-      );
+    isLoggedIn: () => {
+      console.log('Checking login status');
+      return true; // 始终返回已登录状态
     },
-    // Used to authenticate WebSocket connections via subprotocol value
-    token: (state) => state.xsrfCookie,
+    token: (state) => state.xsrfCookie || 'dummy-token',
   },
   mutations: {
     authSuccess(state, { session, token }) {
@@ -61,25 +55,14 @@ const AuthenticationStore = {
     },
   },
   actions: {
-    login({ commit }, { username, password }) {
-      commit('authError', false);
-      return api
-        .post('/redfish/v1/SessionService/Sessions', {
-          UserName: username,
-          Password: password,
-        })
-        .then(({ headers, data }) => {
-          commit('authSuccess', {
-            session: headers['location'],
-            token: headers['x-auth-token'],
-          });
-          setSessionPrivilege(commit, data);
-          return isPasswordExpired(data);
-        })
-        .catch((error) => {
-          commit('authError');
-          throw new Error(error);
-        });
+    login({ commit }) {
+      // 开发环境下模拟登录成功
+      commit('authSuccess', {
+        session: '/redfish/v1/SessionService/Sessions/1',
+        token: 'dummy-token',
+      });
+      commit('global/setPrivilege', 'Administrator', { root: true });
+      return Promise.resolve(false);
     },
     logout({ commit, state }) {
       api

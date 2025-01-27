@@ -189,8 +189,8 @@ export default {
 }
 
 .kvm-status {
-  padding-top: $spacer / 2;
-  padding-left: $spacer / 4;
+  padding-top: calc($spacer / 2);
+  padding-left: calc($spacer / 4);
   display: inline-block;
 }
 

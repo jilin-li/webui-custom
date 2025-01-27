@@ -90,9 +90,6 @@ const routes = [
   },
   {
     path: '/',
-    meta: {
-      requiresAuth: true,
-    },
     component: AppLayout,
     children: [
       {

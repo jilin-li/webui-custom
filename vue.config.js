@@ -7,12 +7,7 @@ module.exports = {
   devServer: {
     https: false,
     port: 8000,
-    proxy: {
-      '/': {
-        target: process.env.BASE_URL || 'http://localhost:3000', // 提供默认值
-        changeOrigin: true,
-      },
-    },
+    proxy: null, // 禁用代理配置
   },
   productionSourceMap: false,
   configureWebpack: (config) => {

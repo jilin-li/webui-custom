@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 //Do not change store or routes import.
@@ -15,47 +16,55 @@ const router = createRouter({
   },
 });
 
-function allowRouterToNavigate(to, next, currentUserRole) {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+function allowRouterToNavigate(to, next) {
+  console.log('allowRouterToNavigate called:', {
+    path: to.path,
+    component: to.matched[0]?.components?.default?.name,
+    matched: to.matched,
+  });
+  
+  // 检查是否在登录页面
+  if (to.path === '/login') {
+    // 如果已登录，重定向到概览页面
     if (store.getters['authentication/isLoggedIn']) {
-      if (to.meta.exclusiveToRoles) {
-        // The privilege for the specific router was verified using the
-        // exclusiveToRoles roles in the router.
-        if (to.meta.exclusiveToRoles.includes(currentUserRole)) {
-          next();
-        } else {
-          next('*');
-        }
-        return;
-      }
-      next();
+      console.log('Already logged in, redirecting to overview');
+      next('/overview');
       return;
     }
-    next('/login');
-  } else {
-    next();
   }
+
+  // 检查是否需要认证
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    console.log('Route requires auth:', to.path);
+    if (!store.getters['authentication/isLoggedIn']) {
+      console.log('Not logged in, redirecting to login');
+      next('/login');
+      return;
+    }
+  }
+
+  // 如果是根路径，重定向到概览页面
+  if (to.path === '/') {
+    console.log('Root path detected, redirecting to overview');
+    next('/overview');
+    return;
+  }
+
+  console.log('Proceeding with navigation to:', to.path);
+  next();
 }
 
 router.beforeEach((to, from, next) => {
-  let currentUserRole = store.getters['global/userPrivilege'];
-  // condition will get satisfied if user refreshed after login
-  if (!currentUserRole && store.getters['authentication/isLoggedIn']) {
-    // invoke API call to get the role ID
-    store
-      .dispatch('authentication/getSessionPrivilege')
-      .then(() => {
-        let currentUserRole = store.getters['global/userPrivilege'];
-        allowRouterToNavigate(to, next, currentUserRole);
-      })
-      // our store got out of sync, start afresh
-      .catch(() => {
-        console.log('Failed to obtain current Roles, logging out.');
-        store.dispatch('authentication/logout');
-      });
-  } else {
-    allowRouterToNavigate(to, next, currentUserRole);
-  }
+  console.log('Navigation Details:', {
+    to: to.path,
+    from: from.path,
+    isLoggedIn: store.getters['authentication/isLoggedIn'],
+    requiresAuth: to.matched.some((record) => record.meta.requiresAuth),
+    matched: to.matched.map((record) => record.path),
+    components: to.matched.map((record) => record.components?.default?.name),
+  });
+
+  allowRouterToNavigate(to, next);
 });
 
 export default router;
