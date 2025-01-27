@@ -30,6 +30,7 @@ import PoliciesStore from './modules/SecurityAndAccess/PoliciesStore';
 import FactoryResetStore from './modules/Operations/FactoryResetStore';
 import SnmpAlertsStore from './modules/Settings/SnmpAlertsStore';
 import KeyClearStore from './modules/Operations/KeyClearStore';
+import TestStore from './modules/HardwareStatus/TestStore';
 
 import DateTimeStore from './modules/Settings/DateTimeStore';
 import VirtualMediaStore from './modules/Operations/VirtualMediaStore';
@@ -72,6 +73,7 @@ const store = new Vuex.Store({
     policies: PoliciesStore,
     factoryReset: FactoryResetStore,
     keyClear: KeyClearStore,
+    test: TestStore,
   },
 });
 

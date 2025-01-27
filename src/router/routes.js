@@ -31,6 +31,7 @@ import VirtualMedia from '@/views/Operations/VirtualMedia';
 import Power from '@/views/ResourceManagement/Power';
 import SnmpAlerts from '@/views/Settings/SnmpAlerts';
 import i18n from '@/i18n';
+import TestInformation from '@/views/HardwareStatus/TestInformation';
 
 const roles = {
   administrator: 'Administrator',
@@ -138,6 +139,14 @@ const routes = [
         component: Sensors,
         meta: {
           title: i18n.global.t('appPageTitle.sensors'),
+        },
+      },
+      {
+        path: '/hardware-status/test-information',
+        name: 'test-information',
+        component: TestInformation,
+        meta: {
+          title: i18n.global.t('appPageTitle.testInformation'),
         },
       },
       {

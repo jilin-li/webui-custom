@@ -113,7 +113,7 @@
         "factoryReset": "@:appPageTitle.factoryReset",
         "firmware": "@:appPageTitle.firmware",
         "hardwareStatus": "Hardware status",
-        "inventory": "@:appPageTitle.inventory",
+        "inventory": "Inventory",
         "kvm": "@:appPageTitle.kvm",
         "ldap": "@:appPageTitle.ldap",
         "logs": "Logs",
@@ -125,14 +125,15 @@
         "powerRestorePolicy": "@:appPageTitle.powerRestorePolicy",
         "rebootBmc": "@:appPageTitle.rebootBmc",
         "policies": "@:appPageTitle.policies",
-        "sensors": "@:appPageTitle.sensors",
+        "sensors": "Sensors",
         "serialOverLan": "SOL console",
         "serverPowerOperations": "@:appPageTitle.serverPowerOperations",
         "certificates": "@:appPageTitle.certificates",
         "virtualMedia": "@:appPageTitle.virtualMedia",
         "snmpAlerts": "@:appPageTitle.snmpAlerts",
         "power": "@:appPageTitle.power",
-        "keyClear": "@:appPageTitle.keyClear"
+        "keyClear": "@:appPageTitle.keyClear",
+        "testInformation": "Test Information"
     },
     "appPageTitle": {
         "changePassword": "Change password",
@@ -162,7 +163,8 @@
         "certificates": "Certificates",
         "snmpAlerts": "SNMP Alerts",
         "virtualMedia": "Virtual media",
-        "keyClear": "Key clear"
+        "keyClear": "Key clear",
+        "testInformation": "Test Information"
     },
     "pageChangePassword": {
         "changePassword": "Change password",
@@ -1282,5 +1284,9 @@
         "RPM": "RPM",
         "V": "V",
         "W": "W"
+    },
+    "pageTest": {
+        "testInformation": "Test Information",
+        "status": "Status"
     }
 }

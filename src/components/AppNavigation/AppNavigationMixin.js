@@ -66,6 +66,11 @@ const AppNavigationMixin = {
               label: i18n.global.t('appNavigation.sensors'),
               route: '/hardware-status/sensors',
             },
+            {
+              id: 'test-information',
+              label: i18n.global.t('appNavigation.testInformation'),
+              route: '/hardware-status/test-information',
+            },
           ],
         },
         {
@@ -190,6 +195,11 @@ const AppNavigationMixin = {
         },
       ],
     };
+  },
+  computed: {
+    isHardwareStatusActive() {
+      return this.$route.path.includes('/hardware-status');
+    },
   },
 };
 
